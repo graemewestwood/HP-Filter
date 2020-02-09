@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Feb  2 15:26:42 2020
-
-@author: gwest
-"""
 import numpy as np
 from scipy.linalg import cho_factor, cho_solve
 from statsmodels.tools.validation import array_like, PandasWrapper
@@ -145,8 +139,10 @@ def hprescott(X, side=2, smooth=1600, freq=''):
             Tautmp = cho_solve(cho_factor(Atmp), Xtmp)
             trend[t] = Tautmp[t]
 		
-    else:
+    elif (side== 2):
         trend = cho_solve(cho_factor(Atot), X)
+    else:
+        raise ValueError('Side Parameter should be 1 or 2')
 
     cyclical = X - trend
     
