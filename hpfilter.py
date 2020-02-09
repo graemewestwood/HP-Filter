@@ -52,6 +52,7 @@ def hprescott(X, side=2, smooth=1600, freq=''):
     Ravn, M.O and H. Uhlig. 2002. "Notes On Adjusted the Hodrick-Prescott
         Filter for the Frequency of Observations." `The Review of Economics and
         Statistics`, 84(2), 371-80.
+    
     Examples
     --------
     from statsmodels.api import datasets, tsa
@@ -115,7 +116,7 @@ def hprescott(X, side=2, smooth=1600, freq=''):
         Xtmp = X[:t+1]
 
         # Solve the system A*Z = X
-        trend[2] = cho_solve(cho_factor(Atmp), Xtmp)[t]
+        trend[t] = cho_solve(cho_factor(Atmp), Xtmp)[t]
 		
         t += 1
 
@@ -125,8 +126,7 @@ def hprescott(X, side=2, smooth=1600, freq=''):
         Atmp = np.concatenate(([np.append([a1],[0])],[a2],[a2[3::-1]],[np.append([0],a1[2::-1])]))
         Xtmp = X[:t+1]
 
-        Tautmp = cho_solve(cho_factor(Atmp), Xtmp)
-        trend[t] = Tautmp[t]
+        trend[t] = cho_solve(cho_factor(Atmp), Xtmp)[t]
 		
         while (t < T-1):
 		
@@ -136,8 +136,7 @@ def hprescott(X, side=2, smooth=1600, freq=''):
             Atmp[t-1:t+1,t-3:t+1] = Aend
 
             Xtmp = X[:t+1]
-            Tautmp = cho_solve(cho_factor(Atmp), Xtmp)
-            trend[t] = Tautmp[t]
+            trend[t] = cho_solve(cho_factor(Atmp), Xtmp)[t]
 		
     elif (side== 2):
         trend = cho_solve(cho_factor(Atot), X)
